@@ -25,7 +25,11 @@ program
   .option('-p, --priority <string>', 'set priority of todo. Only used with "-a" option.')
   .parse(process.argv);
 
+
+let showCompleted = true;
+
 if (program.add) {
+  showCompleted = false;
   //console.log(chalk.red(`the -a (add) option was inputed with the value:  "${program.add}"`));
   let todoTxt = program.add;
   let priority = program.priority || "med";
@@ -46,8 +50,6 @@ if (program.complete) {
   })
 
 }
-
-let showCompleted = true;
 
 if (program.list) {
   //console.log(JSON.stringify(program));

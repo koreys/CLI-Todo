@@ -1,6 +1,8 @@
 # CLI-Todo
 A Simple command line todo list app. Written in javascript. Requires Node.js.
 
+![alt text](Screen.png "CLI-Todo Screenshot")
+
 ##Install
 First install node.js. Go to nodejs.com for OS specific instructions.
 ```
