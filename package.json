@@ -1,5 +1,5 @@
 {
-  "name": "td-app",
+  "name": "CLI-todo",
   "version": "1.0.0",
   "description": "Simple CLI todo list",
   "main": "app.js",
