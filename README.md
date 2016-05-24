@@ -5,16 +5,34 @@ A Simple command line todo list app. Written in javascript. Requires Node.js.
 
 ##Install
 First install node.js. Go to nodejs.com for OS specific instructions.
+
+> I suggest installing CLI-Todo inside a folder in your dropbox folder as I plan on creating a mobile web app that will need access to this database file.
+
 ```
+cd Dropbox
+mkdir CLI-Todo
+cd CLI-Todo
 npm install cli-todo -g
 npm link
 ```
-You will need to create the database file that CLI-Todo uses to store your todo items.
-```
-touch data/todoList.db
-```
+> `npm link` will make the "td" command available anywhere in your command line.
+> You may need to add `sudo` in front of the two `npm` commands.
+
 CLI-Todo uses the awesome NeDB javascript database. It's a flat file NoSQL database that uses a MongoDB API.
 Check it out [here](https://github.com/louischatriot/nedb).
+
+Upon creating your first todo item NeDB will create a database file for you called todoList.db.
+
+Go ahead and create your first todo item:
+
+```
+td -a "Become Sith Lord"
+```
+
+You can see the help by using the -h flag:
+```
+td -h
+```
 
 ##Usage
 ```

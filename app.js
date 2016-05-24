@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 'use strict';
+///// Edit the database name here is you so choose //////
+const dbName = "todoList.db";
+
 const program = require('commander');
 const chalk = require('chalk');
 const moment = require('moment');
@@ -7,7 +10,7 @@ const table = require('easy-table')
 
 //Setup NeDB
 const Datastore = require('nedb');
-const db = new Datastore({ filename: 'data/todoList.db', autoload: true });
+const db = new Datastore({ filename: `${__dirname}/data/${dbName}`, autoload: true });
 
 function todo(todoTxt, priority) {
   this.todoTxt = todoTxt;
@@ -20,9 +23,10 @@ program
   .version('0.0.1')
   .option('-a, --add <string>','Add a new todo item. priority will defualt to "Medium" unless you specify with -p option.')
   .option('-c, --complete <id>', 'Mark todo with <id> complete.')
-  .option('-s, --showComplete [timeperiod]', 'Show all completed Items. Optionally specify a time periord. Defualts to "week". Choices are "week", "Month", "Year", "AllTime"', /^(week|month|year|allTime)$/i, 'week')
   .option('-l, --list', 'List all open todo items')
-  .option('-p, --priority <string>', 'set priority of todo. Only used with "-a" option.')
+  .option('-p, --priority <string>', 'set priority of todo. Only used with "-a" option. Possible options are low, med, or high.')
+  .option('-s, --showComplete [timeperiod]', 'Show all completed Items. Optionally specify a time periord. Defualts to "week". Choices are "week", "Month", "Year", "AllTime"', /^(week|month|year|allTime)$/i, 'week')
+
   .parse(process.argv);
 
 
@@ -33,12 +37,20 @@ if (program.add) {
   //console.log(chalk.red(`the -a (add) option was inputed with the value:  "${program.add}"`));
   let todoTxt = program.add;
   let priority = program.priority || "med";
-  let addTodo = new todo(todoTxt, priority);
-  //Insert this new todo into database
-  db.insert(addTodo, function (err, newTodo) {
-    console.log(chalk.yellow(`New todo Added!`));
-    listTodos();
-  });
+
+  if (priority.toLowerCase() === 'med'|| priority.toLowerCase() === 'low'|| priority.toLowerCase() === 'high'){
+    let addTodo = new todo(todoTxt, priority);
+    //Insert this new todo into database
+
+    db.insert(addTodo, function (err, newTodo) {
+      console.log(chalk.yellow(`New todo Added!`));
+      listTodos();
+    });
+
+  } else {
+    console.log(chalk.bgRed(`The -p (priority) option must be set to "low", "med", or "high". You entered: ${priority}`));
+  }
+
 }
 
 if (program.complete) {
