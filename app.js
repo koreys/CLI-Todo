@@ -25,15 +25,12 @@ program
   .option('-c, --complete <id>', 'Mark todo with <id> complete.')
   .option('-l, --list', 'List all open todo items')
   .option('-p, --priority <string>', 'set priority of todo. Only used with "-a" option. Possible options are low, med, or high.')
-  .option('-s, --showComplete [timeperiod]', 'Show all completed Items. Optionally specify a time periord. Defualts to "week". Choices are "week", "Month", "Year", "AllTime"', /^(week|month|year|allTime)$/i, 'week')
+  .option('-s, --showComplete [timeperiod]', 'Show all completed Items. Optionally specify a time periord. Defualts to "week". Choices are "week", "Month", "Year", "AllTime"', /^(week|month|year|allTime)$/i)
 
   .parse(process.argv);
 
 
-let showCompleted = true;
-
 if (program.add) {
-  showCompleted = false;
   //console.log(chalk.red(`the -a (add) option was inputed with the value:  "${program.add}"`));
   let todoTxt = program.add;
   let priority = program.priority || "med";
@@ -66,15 +63,18 @@ if (program.complete) {
 if (program.list) {
   //console.log(JSON.stringify(program));
   listTodos();
-  showCompleted = false;
 }
 
 if (program.showComplete) {
+  var period = program.showComplete;
+  listCompleteTodos(period)
+/*
   if (showCompleted){
     listCompleteTodos(program.showComplete);
   } else {
     showCompleted = true;
   }
+*/
 }
 
 function listTodos(){
@@ -91,7 +91,6 @@ function listTodos(){
         t.cell(`Date`, moment(todo.dateAdded).format('MM/DD/YYYY h:mm:ss a'));
         t.cell(`Age`, moment(todo.dateAdded).fromNow());
         t.newRow();
-        //console.log(chalk.blue(`${index} - `) + chalk.white.bgRed(' HIGH ') + chalk.bold.white(` - ${todo.todoTxt}`) + chalk.green(` Date: ${moment(todo.dateAdded).format('MM/DD/YYYY h:mm:ss a')}`));
       }
     })
 
@@ -103,7 +102,6 @@ function listTodos(){
         t.cell(`Date`, moment(todo.dateAdded).format('MM/DD/YYYY h:mm:ss a'));
         t.cell(`Age`, moment(todo.dateAdded).fromNow());
         t.newRow();
-        //console.log(chalk.blue(`${index} - `) + chalk.bold.white(`${todo.todoTxt}`) + chalk.green(` Date: ${moment(todo.dateAdded).format('MM/DD/YYYY h:mm:ss a')}`));
       }
     })
 
@@ -115,9 +113,9 @@ function listTodos(){
         t.cell(`Date`, moment(todo.dateAdded).format('MM/DD/YYYY h:mm:ss a'));
         t.cell(`Age`, moment(todo.dateAdded).fromNow());
         t.newRow();
-        //console.log(chalk.blue(`${index} - `) + chalk.bgYellow(' LOW ') + chalk.bold.white(` - ${todo.todoTxt}`) + chalk.green(` Date: ${moment(todo.dateAdded).format('MM/DD/YYYY h:mm:ss a')}`));
       }
     })
+    //t.sort(['Date']);
     console.log(t.toString());
   });
 
